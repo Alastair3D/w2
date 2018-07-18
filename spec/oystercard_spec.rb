@@ -84,9 +84,13 @@ describe Oystercard do
       subject.touch_out(exit_station)
       expect(subject.journey).to include journey
     end
+    it 'adds journey to history' do
+      subject.top_up(10)
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.history).to include journey
+    end
   end
-
-
 
 
 
