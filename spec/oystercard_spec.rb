@@ -1,6 +1,7 @@
 require 'oystercard'
 
 describe Oystercard do
+  subject(:oystercard) { Oystercard.new }
 
   it 'has a default balance of £0.00' do
     expect(subject.balance).to eq 0.00
@@ -27,5 +28,24 @@ describe Oystercard do
     expect(subject.deduct(3)).to eq 17
     expect { subject.deduct 3 }.to change { subject.balance }.by -3
   end
+
+  describe '#touch_in' do
+    it { is_expected.to respond_to (:touch_in) }
+    it 'sets in_journey status to true' do
+      subject.touch_in
+        expect(subject.in_journey).to be true
+    end
+  end
+
+  describe '#touch_out' do
+    it { is_expected.to respond_to (:touch_out) }
+    it 'sets in_journey status to false' do
+      subject.touch_in
+      subject.touch_out
+      expect(subject.in_journey).to be false
+    end
+  end
+
+
 
 end
