@@ -14,22 +14,24 @@ class Oystercard
   end
 
   def top_up(amount)
-    fail "Maximum balance of #{MAX_BALANCE} exceeded" if @balance + amount > MAX_BALANCE
+    raise "Error - maximum balance of #{MAX_BALANCE} exceeded" if @balance + amount > MAX_BALANCE
     @balance += amount
   end
 
-  def deduct(fare)
-    @balance -= fare
-  end
-
   def touch_in
-    fail 'Insufficient balance to touch in' if @balance < MIN_BALANCE
+    raise 'Insufficient balance to touch in' if @balance < MIN_BALANCE
     @in_journey = true
   end
 
-  def touch_out
+  def touch_out(fare)
     @in_journey = false
+    @balance -= fare
   end
 
+private
+
+def deduct(fare)
+  @balance -= fare
+end
 
 end

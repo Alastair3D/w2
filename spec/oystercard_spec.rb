@@ -18,7 +18,7 @@ describe Oystercard do
   it 'raises an error if maximum balance is exceeded' do
     maximum_balance = Oystercard::MAX_BALANCE
     subject.top_up(maximum_balance)
-    expect { subject.top_up(1) }.to raise_error "Maximum balance of #{maximum_balance} exceeded"
+    expect { subject.top_up(1) }.to raise_error "Error - maximum balance of #{maximum_balance} exceeded"
   end
 
 # Q. why does this test not pass?  fail vs. raise_error.. () Vs. {} + PRY
@@ -27,16 +27,11 @@ describe Oystercard do
   #   expect { subject.top_up(41) }.to raise_error 'Exceeds max balance'
   # end
 
-  it 'deducts the fare from the balance' do
-    subject.top_up(20)
-    expect(subject.deduct(3)).to eq 17
-    expect { subject.deduct 3 }.to change { subject.balance }.by -3
-  end
-
   describe '#touch_in' do
     it { is_expected.to respond_to (:touch_in) }
     it 'will not touch in balance is below minimum balance' do
-      expect(subject.touch_in).to raise_error 'Insufficient balance to touch in'
+      # expect(subject.touch_in).to raise_error 'Insufficient balance to touch in'
+      expect { subject.touch_in }. to raise_error 'Insufficient balance to touch in'
     end
     it 'sets in_journey status to true' do
       subject.top_up(10)
@@ -51,8 +46,14 @@ describe Oystercard do
     it 'sets in_journey status to false' do
       subject.top_up(10)
       subject.touch_in
-      subject.touch_out
+      subject.touch_out(3)
       expect(subject.in_journey?).to be false
+    end
+    it 'deducts the fare from the balance' do
+      subject.top_up(20)
+      subject.touch_in
+      expect{ subject.touch_out(3) }.to change { subject.balance }.by -3
+      # expect{ subject.touch_out }.to change { subject.balance }.by(-Oystercard::MIN_CHARGE)
     end
   end
 
