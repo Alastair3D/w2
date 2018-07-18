@@ -2,9 +2,17 @@ require 'oystercard'
 
 describe Oystercard do
   subject(:oystercard) { Oystercard.new }
+  # subject(:card) {described_class.new(journey_class: journey_class)}
   let(:entry_station) { double :entry_station }
   let(:exit_station) { double :exit_station }
 # Q Translate this.  Syntax options for doubles.
+  # let(:max_balance) { Oystercard::MAX_BALANCE}
+  # let(:default_balance) { Oystercard::DEFAULT_BALANCE }
+  # let(:min_balance) { Oystercard::MIN_BALANCE }
+  # let(:fare) { 1 }
+  # before { allow(journey_class).to receive(:new).and_return(journey)}
+  # let(:journey_log) { double :journey_log }
+
 
   describe '#initialize' do
     it 'defaults balance to £0.00 when no params present' do
