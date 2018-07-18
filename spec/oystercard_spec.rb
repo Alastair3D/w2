@@ -2,7 +2,8 @@ require 'oystercard'
 
 describe Oystercard do
   subject(:oystercard) { Oystercard.new }
-
+  let(:station) { double :station}
+# Q Translate this.  Syntax options for doubles.
   it 'initializes with a default balance of £0.00' do
     expect(subject.balance).to eq 0.00
   end
@@ -20,24 +21,26 @@ describe Oystercard do
     subject.top_up(maximum_balance)
     expect { subject.top_up(1) }.to raise_error "Error - maximum balance of #{maximum_balance} exceeded"
   end
-
 # Q. why does this test not pass?  fail vs. raise_error.. () Vs. {} + PRY
-  # it 'raises an error if max balance is exceeded' do
-  #   subject.top_up(50)
-  #   expect { subject.top_up(41) }.to raise_error 'Exceeds max balance'
-  # end
 
   describe '#touch_in' do
-    it { is_expected.to respond_to (:touch_in) }
-    it 'will not touch in balance is below minimum balance' do
-      # expect(subject.touch_in).to raise_error 'Insufficient balance to touch in'
-      expect { subject.touch_in }. to raise_error 'Insufficient balance to touch in'
+    # it { is_expected.to respond_to (:touch_in) }
+    it { is_expected.to respond_to(:touch_in).with(1).argument }
+    it 'will not touch inif balance is below minimum balance' do
+# Q. expect(subject.touch_in).to raise_error 'Insufficient balance to touch in'
+      expect { subject.touch_in(:station) }. to raise_error 'Insufficient balance - Please top up'
     end
     it 'sets in_journey status to true' do
       subject.top_up(10)
-      subject.touch_in
-        expect(subject.in_journey).to be true
-        # expect(subject).to be_in_journey
+      subject.touch_in(:station)
+      expect(subject.in_journey).to be true
+# Q.  expect(subject).to be_in_journey
+    end
+    it 'stores the entry station' do
+      subject.top_up(10)
+      subject.touch_in(station)
+      expect(subject.entry_station).to eq station
+# Q. Why () ok here?
     end
   end
 
@@ -45,13 +48,13 @@ describe Oystercard do
     it { is_expected.to respond_to (:touch_out) }
     it 'sets in_journey status to false' do
       subject.top_up(10)
-      subject.touch_in
+      subject.touch_in(:station)
       subject.touch_out(3)
       expect(subject.in_journey?).to be false
     end
     it 'deducts the fare from the balance' do
       subject.top_up(20)
-      subject.touch_in
+      subject.touch_in(:station)
       expect{ subject.touch_out(3) }.to change { subject.balance }.by -3
       # expect{ subject.touch_out }.to change { subject.balance }.by(-Oystercard::MIN_CHARGE)
     end
