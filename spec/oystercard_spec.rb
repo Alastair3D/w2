@@ -7,22 +7,21 @@ describe Oystercard do
 # Q Translate this.  Syntax options for doubles.
 
   describe '#initialize' do
-  it 'defaults balance to £0.00 when no params present' do
-    expect(subject.balance).to eq 0.00
+    it 'defaults balance to £0.00 when no params present' do
+      expect(subject.balance).to eq 0.00
+    end
+  # Q. how can I refactor below?
+    # it 'allows variable balance to be passed in' do
+    #   o1 = Oystercard.new(50)
+    #   expect(o1.balance).to eq 50.00
+    # end
+    it 'is not in a journey' do
+      expect(subject).not_to be_in_journey
+    end
+    it 'has an empty list of journeys by default' do
+      expect(subject.journey).to be_empty
+    end
   end
-# Q. how can I refactor below?
-  # it 'allows variable balance to be passed in' do
-  #   o1 = Oystercard.new(50)
-  #   expect(o1.balance).to eq 50.00
-  # end
-  it 'is not in a journey' do
-    expect(subject).not_to be_in_journey
-  end
-
-  it 'has an empty list of journeys by default' do
-    expect(subject.journeys).to be_empty
-  end
-end
 
   describe '#top-up' do
     it 'can be topped up' do
@@ -78,12 +77,12 @@ end
       expect(subject.exit_station).to eq exit_station
     end
 # Explain let below & why passing in undoubled entry and exit station to touchin/out
-    let(:journey) { {entry_station: entry_station, exit_station: exit_station} }
+    let(:journey) { {entry: entry_station, exit: exit_station} }
     it 'saves completed journeys' do
       subject.top_up(10)
       subject.touch_in(entry_station)
       subject.touch_out(exit_station)
-      expect(subject.journeys).to include journey
+      expect(subject.journey).to include journey
     end
   end
 
