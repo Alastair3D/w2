@@ -16,10 +16,16 @@ describe Oystercard do
     expect { subject.top_up(1) }.to raise_error "Maximum balance of #{maximum_balance} exceeded"
   end
 
-# Q. why does this test not pass?  fail vs. raise_error
+# Q. why does this test not pass?  fail vs. raise_error.. () Vs. {} + PRY
   # it 'raises an error if max balance is exceeded' do
   #   subject.top_up(50)
   #   expect { subject.top_up(41) }.to raise_error 'Exceeds max balance'
   # end
+
+  it 'deducts the fare from the balance' do
+    subject.top_up(20)
+    expect(subject.deduct(3)).to eq 17
+    expect { subject.deduct 3 }.to change { subject.balance }.by -3
+  end
 
 end
