@@ -3,8 +3,12 @@ require 'oystercard'
 describe Oystercard do
   subject(:oystercard) { Oystercard.new }
 
-  it 'has a default balance of £0.00' do
+  it 'initializes with a default balance of £0.00' do
     expect(subject.balance).to eq 0.00
+  end
+
+  it 'initializes as not in a journey' do
+    expect(subject).not_to be_in_journey
   end
 
   it 'can be topped up' do
@@ -34,6 +38,7 @@ describe Oystercard do
     it 'sets in_journey status to true' do
       subject.touch_in
         expect(subject.in_journey).to be true
+        # expect(subject).to be_in_journey
     end
   end
 
@@ -42,7 +47,7 @@ describe Oystercard do
     it 'sets in_journey status to false' do
       subject.touch_in
       subject.touch_out
-      expect(subject.in_journey).to be false
+      expect(subject.in_journey?).to be false
     end
   end
 
